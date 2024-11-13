@@ -184,6 +184,15 @@ void sharedLogs() {
 	[[[[UIApplication sharedApplication] keyWindow] rootViewController] presentViewController:activityVC animated:YES completion:nil];
 }
 
+void deleteLogs() {
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask, YES);
+	NSString *path = [paths objectAtIndex:0];
+	path = [path stringByAppendingPathComponent:@"Caches"];
+	path = [path stringByAppendingPathComponent:@"Logs"];
+	NSFileManager *fileManager = [NSFileManager defaultManager];
+	[fileManager removeItemAtPath:path error:nil];
+}
+
 __attribute__((constructor))
 static void initialize_tweak() {
     flog(@"Tweaked");
@@ -208,6 +217,10 @@ static void initialize_tweak() {
 
 		[alert addAction:[UIAlertAction actionWithTitle:@"Airdrop Logs" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
 			sharedLogs();
+		}]];
+
+        [alert addAction:[UIAlertAction actionWithTitle:@"Delete Logs" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+			deleteLogs();
 		}]];
 
         UIWindow *keyWindow = [UIApplication sharedApplication].keyWindow;

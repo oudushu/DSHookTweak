@@ -39,14 +39,22 @@ SOURCES += $(shell find $(CocoaLumberjack_ROOT) -name '*.m')
 _CocoaLumberjack_IMPORTS += $(shell /bin/ls -d $(CocoaLumberjack_ROOT)/)
 CocoaLumberjack_IMPORTS = -I$(CocoaLumberjack_ROOT)/ $(call dtoim, $(_CocoaLumberjack_IMPORTS))
 
+fishhook_ROOT = libs/fishhook
+
+SOURCES += $(shell find $(fishhook_ROOT) -name '*.c')
+
+_fishhook_IMPORTS += $(shell /bin/ls -d $(fishhook_ROOT)/)
+fishhook_IMPORTS = -I$(fishhook_ROOT)/ $(call dtoim, $(_fishhook_IMPORTS))
+
 TWEAK_NAME = DSHookTweak
-$(TWEAK_NAME)_FILES = Tweak.x $(SOURCES)
-$(TWEAK_NAME)_FRAMEWORKS = CoreGraphics UIKit ImageIO QuartzCore AVFoundation Foundation
+$(TWEAK_NAME)_FILES = Tweak.x Tweak_fishhook.x $(SOURCES)
+$(TWEAK_NAME)_FRAMEWORKS = CoreGraphics UIKit ImageIO QuartzCore AVFoundation Foundation OpenGLES GLKit
 $(TWEAK_NAME)_LIBRARIES = sqlite3 z
 $(TWEAK_NAME)_CFLAGS += -fobjc-arc -Wno-deprecated-declarations -Wno-unused-variable -Wno-unused-but-set-variable -w -Wno-unsupported-availability-guard $(IMPORTS) -g $(LookinServer_IMPORTS) -g
 $(TWEAK_NAME)_CFLAGS += $(IMPORTS) -g 
 $(TWEAK_NAME)_CFLAGS += $(LookinServer_IMPORTS) -g
 $(TWEAK_NAME)_CFLAGS += $(CocoaLumberjack_IMPORTS) -g
+$(TWEAK_NAME)_CFLAGS += $(fishhook_IMPORTS) -g
 $(TWEAK_NAME)_CCFLAGS += -std=gnu++11
 
 # For LookinServer
